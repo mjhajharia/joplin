@@ -60,7 +60,7 @@ footer { background: #ffffff; }
 .menu a, .pagination a, .article-meta a { color: #fffff8; }
 .menu a:hover, .menu .active, .summary::first-letter, .footer a:hover, .terms a:hover, .bg-number {
   background: #ffffff;
-  color: #fffff8;
+  color: #232323;
 }
 .menu, .article-meta, .post-nav { text-align: left; }
 .menu ul, .terms, .footer ul { padding-left: 0; }
