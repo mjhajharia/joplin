@@ -13,26 +13,14 @@
 {{ end }}
 
 {{ if .IsHome }}
-{{ range $i, $p := (where .Site.RegularPages "Section" "card") }}
+{{ range (where .Site.RegularPages "Section" "card") }}
 <section class="article-list"{{ with .Params.style }}{{ printf " style=%q" . | safeHTMLAttr }}{{ end }}>
-  <table>
-  <tbody>
-  <tr>
-  {{if (eq (mod $i 2) 0) }}
-  <td class="side-title"><h1>{{ $p.Title }}</h1></td>
-  <td class="spacer spacer-left"></td>
-  <td>{{ $p.Content }}</td>
-  {{ else }}
-  <td>{{ $p.Content }}</td>
-  <td class="spacer spacer-right"></td>
-  <td class="side-title"><h1>{{ $p.Title }}</h1></td>
-  {{ end }}
-  </tr>
-  </tbody>
-  </table>
+  <h1>{{ .Title }}</h1>
+  <div>{{ .Content }}</div>
 </section>
 {{ end }}
 {{ end }}
+
 
 {{ $pages := .Pages }}
 {{ if .IsHome }}
