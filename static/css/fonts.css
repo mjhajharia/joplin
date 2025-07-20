@@ -1,0 +1,13 @@
+body {
+  font-family:  Avenir Next, Inter, -apple-system, "system-ui", Palatino, Georgia, Garamond;
+  font-weight: 400;
+  color:#232323;
+}
+code {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 85%;
+}
+h1, h2, h3 {
+  font-family: Avenir Next, Inter, -apple-system, "system-ui", Palatino, Georgia, Garamond;
+  font-weight: 400;
+}
