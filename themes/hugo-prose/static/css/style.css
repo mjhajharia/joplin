@@ -23,7 +23,7 @@ main {
   flex: 1 0 100%;
 }
 .list main > .post-card {
-  flex: 0 0 calc(50% - .5em);
+  flex: 0 0 100%;
 }
 .menu, .container { padding: 0 1em 0; }
 .article, .appendix {
