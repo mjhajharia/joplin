@@ -1,29 +1,35 @@
-#!/usr/bin/env bash
+#!/bin/bash
+set -e
 
-# Loop through all .md files in content/posts or wherever you store them
-for file in content/posts/*.md; do
-  filename=$(basename "$file" .md)
+CONTENT_DIR="./content/posts"  
 
-  # Replace title: ... with title: filename
-  sed -i "s/^title: .*/title: $filename/" "$file"
+for file in "$CONTENT_DIR"/*.md; do
+  [ -f "$file" ] || continue
 
-  # Remove first line if it's "# filename"
-  first_heading="# $filename"
-  first_line=$(head -n 1 "$file")
+  # Extract and slugify the title
+  title=$(awk '/^title:/ { sub(/^title:[[:space:]]*/, ""); print; exit }' "$file")
+  slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-//;s/-$//')
+  newfile="$CONTENT_DIR/$slug.md"
 
-  # Skip YAML front matter
-  if [[ "$first_line" == "---" ]]; then
-    heading_line=$(awk '/^---$/ {found++} found==2 {print; exit}' "$file" | head -n1)
-    if [[ "$heading_line" == "$first_heading" ]]; then
-      # Remove the heading line (after front matter)
-      awk -v skip="$first_heading" '
-        BEGIN {found=0}
-        {
-          if ($0 == "---") found++
-          if (found == 2 && $0 == skip && !printed) {printed=1; next}
-          print
-        }
-      ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
-    fi
-  fi
+  # Process file:
+  awk -v title="$title" -v slug="$slug" '
+    BEGIN { inFM = 0; removed = 0 }
+    /^---/ {
+      inFM++
+      print
+      next
+    }
+    inFM == 1 && /^slug:/ {
+      print "slug: " slug
+      next
+    }
+    inFM == 2 && tolower($0) == "# " tolower(title) && removed == 0 {
+      removed = 1
+      next
+    }
+    { print }
+  ' "$file" > "$file.tmp"
+
+  mv "$file.tmp" "$newfile"
+  if [[ "$file" != "$newfile" ]]; then rm "$file"; fi
 done
