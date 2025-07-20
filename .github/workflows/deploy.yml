@@ -47,6 +47,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Fix frontmatter and headings
+        run: |
+          chmod +x fix_frontmatter.sh
+          ./fix_frontmatter.sh
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
